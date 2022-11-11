@@ -22,42 +22,77 @@ def asciiToBin(c):
 
     return binario
 
-def encrypt(f_key, f_text):
+def binToAscii(bin):
 
+    binario = ''.join([str(item) for item in bin])
+    char = int(binario,2)
+    
+    return char
+
+def encrypt(f_key, f_text):
     size = len(f_key.read())
     f_key.seek(0)
 
-    for i in range(size):
-        print(f_key.readline(i), i)
+    f_out = open( (f_text.name + "Crypt.txt"), "w")
 
+    for i in range(size):
+        char_k = ord(f_key.readline(1))
+        char_t = ord(f_text.readline(1))
+        char_c = ""
+
+        bin_k = asciiToBin(char_k)
+        bin_t = asciiToBin(char_t)
+        bin_c = [0,0,0,0,0,0,0]
+
+        for i in range(len(bin_k)):
+            
+            print(bin_k[i], bin_t[i], bool(bin_k[i]), bool(bin_t[i]))
+
+            if bin_k[i] != bin_t[i]:
+                bin_c[i] = 1
+
+        char_c = binToAscii(bin_c)
+        print(char_k, bin_k)
+        print(char_t, bin_t)
+        print(char_c, bin_c)
+        
+        break
+    return f_out
     
 def main():
 
     print(f'{" Vernam Cipher ":=^50}')
 
+    print("[*] Inform the option:")
+    print("1 - Encrypt")
+    print("2 - Decrypt")
+
+    option = 1  #input("=> ")
+
     try:
 
-        if sys.argv[1] == "-c":
+        file = "chave.dat" #input("File key: ")
+        f_key = open(file, "r")
+        file = "textCrypt.txt"  #input("File text: ")
+        f_in = open(file, "r")
 
-            f_key = open(sys.argv[2], "r")
-            f_in = open(sys.argv[3], "r")
+    except FileNotFoundError:
+        print("[-]File %s not found" % file)
+        exit()
 
-            if(len(f_key.read()) != len(f_in.read())):
-                print("[-] The file key %s different size of %s" % (sys.argv[2], sys.argv[3]))
-
-            f_key.seek(0)
-            f_in.seek(0)
-
-            encrypt(f_key, f_in)
+    if(len(f_key.read()) != len(f_in.read())):
+        print("[-] The file key %s different size of %s" % (f_key.name, f_in.name))
+        exit()
         
-        if sys.argv[1] == "-d":
+    f_key.seek(0)
+    f_in.seek(0)
+    
+    if option == 1:
+        f_out = encrypt(f_key, f_in)
+        
+    if option == 2:
             pass
 
-    except IndexError:
-        print("[-] No file in argv")
-        sys.exit()    
-    except FileNotFoundError:
-        print("[-] File not exits", sys.argv[2], "or", sys.argv[3])
-        sys.exit()
+    #print("[+] File %s created with sucesfull!" % f_out.name)
 
 main()
