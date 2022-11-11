@@ -32,7 +32,13 @@ def encrypt(f_key, f_text):
     size = len(f_key.read())
     f_key.seek(0)
 
-    f_out = open( (f_text.name + "Crypt.txt"), "w")
+    f_out_name = ''
+
+    for i in f_text.name:
+        if i == ".":    break
+        f_out_name = f_out_name + i
+
+    f_out = open( (f_out_name + "Crypt.txt"), "w")
 
     for i in range(size):
         char_k = ord(f_key.readline(1))
@@ -51,6 +57,21 @@ def encrypt(f_key, f_text):
         f_out.write(char_c)
         
     return f_out
+
+def decrypt(f_key, f_text):
+    size = len(f_key.read())
+    f_key.seek(0)
+
+    f_out_name = ''
+
+    for i in f_text.name:
+        if i == ".":    break
+        f_out_name = f_out_name + i
+
+    f_out = open( (f_out_name + "Decypt.txt"), "w")
+
+    
+    return f_out
     
 def main():
 
@@ -60,7 +81,7 @@ def main():
     print("1 - Encrypt")
     print("2 - Decrypt")
 
-    option = 1  #input("=> ")
+    option = 2  #input("=> ")
 
     try:
 
@@ -84,7 +105,7 @@ def main():
         f_out = encrypt(f_key, f_in)
         
     elif option == 2:
-            pass
+        f_out = decrypt(f_key, f_in)
 
     print("[+] The %s file was created successfully" % f_out.name)
 
