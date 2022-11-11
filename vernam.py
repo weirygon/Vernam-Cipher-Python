@@ -23,7 +23,6 @@ def asciiToBin(c):
     return binario
 
 def binToAscii(bin):
-
     binario = ''.join([str(item) for item in bin])
     char = int(binario,2)
     
@@ -45,18 +44,12 @@ def encrypt(f_key, f_text):
         bin_c = [0,0,0,0,0,0,0]
 
         for i in range(len(bin_k)):
-            
-            print(bin_k[i], bin_t[i], bool(bin_k[i]), bool(bin_t[i]))
-
             if bin_k[i] != bin_t[i]:
                 bin_c[i] = 1
 
-        char_c = binToAscii(bin_c)
-        print(char_k, bin_k)
-        print(char_t, bin_t)
-        print(char_c, bin_c)
+        char_c = chr(binToAscii(bin_c))
+        f_out.write(char_c)
         
-        break
     return f_out
     
 def main():
@@ -73,7 +66,7 @@ def main():
 
         file = "chave.dat" #input("File key: ")
         f_key = open(file, "r")
-        file = "textCrypt.txt"  #input("File text: ")
+        file = "text.txt"  #input("File text: ")
         f_in = open(file, "r")
 
     except FileNotFoundError:
@@ -90,9 +83,9 @@ def main():
     if option == 1:
         f_out = encrypt(f_key, f_in)
         
-    if option == 2:
+    elif option == 2:
             pass
 
-    #print("[+] File %s created with sucesfull!" % f_out.name)
+    print("[+] The %s file was created successfully" % f_out.name)
 
 main()
