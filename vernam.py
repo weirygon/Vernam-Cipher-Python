@@ -26,6 +26,9 @@ def binToAscii(bin):
     
     return char
 
+def genKey(file):
+    pass
+
 def encrypt(f_key, f_text):
     size = len(f_key.read())
     f_key.seek(0)
