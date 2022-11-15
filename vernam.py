@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+from random import randint
 
 def asciiToBin(c):
     quoc = 1
@@ -27,7 +28,17 @@ def binToAscii(bin):
     return char
 
 def genKey(file):
-    pass
+    size = len(file.read())
+    file.seek(0)
+
+    f_out = open("chave.dat", "w", encoding="ascii")
+
+    for i in range(size):
+        char = chr(randint(0, 126))
+        f_out.write(char)
+
+    f_out.close()
+    
 
 def encrypt(f_key, f_text):
     size = len(f_key.read())
@@ -105,10 +116,18 @@ def main():
             print("[-] Error: Invalid Option!")
             exit()
 
-        file = input("File key: ")
-        f_key = open(file, "r", encoding="ascii")
         file = input("File text: ")
         f_in = open(file, "r",encoding="ascii")
+
+        if option == 2:
+            file = input("File key: ")
+            f_key = open(file, "r", encoding="ascii")
+        
+        else:
+            print("[*] Genering key...")
+            genKey(f_in)
+            f_key = open("chave.dat", "r", encoding="ascii")
+            print("[+] File key %s created!" % f_key.name)
 
         if(len(f_key.read()) != len(f_in.read())):
             print("[-] The file key %s different size of %s" % (f_key.name, f_in.name))
@@ -144,6 +163,10 @@ def main():
         print("[-] Error: Invalid option!")
         exit()
 
-    print("[+] The %s file was created successfully" % f_out.name)
+    print("[+] The %s file was created successfully!" % f_out.name)
+    
+    f_in.close()
+    f_key.close()
+    f_out.close()
 
 main()
